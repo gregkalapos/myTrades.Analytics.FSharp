@@ -75,6 +75,6 @@ module Rsi =
                 | head when head.Value > 70m && (lastOder|> isBuy) -> //Sell
                     let currentQuote = Array.head price
                     let sellItem = Sell ( {Date = currentQuote.Date; Value = currentQuote.Value}, (((double((currentQuote.Value / lastBuyPrice ))) - 1.0) * 100.0) )
-                    backTestRsiWithPriceHelper tail (Array.tail price) Order.Sell result currentQuote.Value
+                    backTestRsiWithPriceHelper tail (Array.tail price) Order.Sell (sellItem::result) currentQuote.Value
                 | _ ->  backTestRsiWithPriceHelper tail (Array.tail price) lastOder result lastBuyPrice //No action, just skip
         backTestRsiWithPriceHelper (List.ofSeq rsiData) (Seq.toArray price) Order.Sell [] 0m
