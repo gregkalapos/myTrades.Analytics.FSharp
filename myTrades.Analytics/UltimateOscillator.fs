@@ -1,6 +1,5 @@
 ﻿namespace MyTrades.Analytics
 
-//Williams %R
 module UltimateOscillator =
 
     let BuyingPressure (prev: OHCL) (current: OHCL) =
