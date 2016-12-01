@@ -26,11 +26,9 @@ module WilliamsPR =
             match williamsValues with
             | [] -> result
             | head::t1::t2::t3::t4::t5::tRest when head.Value = 0m && t5.Value > -15m  -> 
-                //sell
                 let cPrice = List.head price
                 backtestingWilliamsPrInner (t1::t2::t3::t4::t5::tRest) (List.tail price) (Buy {Value = cPrice.Value; Date = cPrice.Date}::result)
             | head::t1::t2::t3::t4::t5::tRest when head.Value = -100m && t5.Value < -85m  -> 
-                //sell
                 let cPrice = List.head price                
                 //TODO
                 backtestingWilliamsPrInner (t1::t2::t3::t4::t5::tRest) (List.tail price) (Sell ({Value = cPrice.Value; Date = cPrice.Date}, 3.0)::result)
