@@ -54,7 +54,7 @@ module MovingAvarage =
         getTrendForDataHelper (Seq.toArray stockData) ((Seq.length stockData) - 1) []
             
     //cross over: buy when MA is down trend and Price goes over it from below 
-    let BackTestMovingAvarageWithPrice (movingAvarageWithTrend: seq<QuoteWithDirection>) (price: Quote array) =       
+    let BackTestMovingAvarageWithPrice (movingAvarageWithTrend: seq<QuoteWithDirection>) (price: seq<Quote>) =       
         let rec backTestMovingAvarageWithPriceHelper counter (movingAvarageWithTrend: seq<QuoteWithDirection>) (price: Quote array) (result: TransactionQuote list) lastOrder lastBuyPrice =
             System.Diagnostics.Debug.WriteLine(price.[counter].Date.ToString());
             match counter with
@@ -97,4 +97,4 @@ module MovingAvarage =
                                                       let sellItem = Sell ({ Date = price.[counter].Date ; Value = price.[counter].Value } ,  gain)
                                                       backTestMovingAvarageWithPriceHelper (counter + 1) movingAvarageWithTrend price (sellItem::result) Order.Sell 0m                        
                     | _ -> backTestMovingAvarageWithPriceHelper (counter + 1) movingAvarageWithTrend price result lastOrder lastBuyPrice
-        backTestMovingAvarageWithPriceHelper (1) movingAvarageWithTrend price [] Order.Sell 0m
+        backTestMovingAvarageWithPriceHelper (1) movingAvarageWithTrend (Seq.toArray price) [] Order.Sell 0m

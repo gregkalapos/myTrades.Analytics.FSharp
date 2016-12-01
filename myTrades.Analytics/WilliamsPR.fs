@@ -20,3 +20,22 @@ module WilliamsPR =
             | counter when counter = pricesLastIndex -> ((newVal::result) |> List.rev |> List.toSeq)
             | _ -> williamsPRHelper prices nDays  (counter + 1) (newVal::result)
         williamsPRHelper prices nDays  0 []
+
+    let BackTestWilliamsPe (williamsValues: seq<Quote>) (price: seq<Quote>) =
+        let rec backtestingWilliamsPrInner (williamsValues: Quote list) (price: Quote list) (result: TransactionQuote list) =
+            match williamsValues with
+            | [] -> result
+            | head::t1::t2::t3::t4::t5::tRest when head.Value = 0m && t5.Value > -15m  -> 
+                //sell
+                let cPrice = List.head price
+                backtestingWilliamsPrInner (t1::t2::t3::t4::t5::tRest) (List.tail price) (Buy {Value = cPrice.Value; Date = cPrice.Date}::result)
+            | head::t1::t2::t3::t4::t5::tRest when head.Value = -100m && t5.Value < -85m  -> 
+                //sell
+                let cPrice = List.head price                
+                //TODO
+                backtestingWilliamsPrInner (t1::t2::t3::t4::t5::tRest) (List.tail price) (Sell ({Value = cPrice.Value; Date = cPrice.Date}, 3.0)::result)
+            | _ -> 
+                ///just skip
+                backtestingWilliamsPrInner (List.tail williamsValues) (List.tail price) result
+        backtestingWilliamsPrInner (Seq.toList williamsValues) (Seq.toList price) []
+    
