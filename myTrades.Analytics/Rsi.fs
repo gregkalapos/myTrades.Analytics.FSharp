@@ -1,6 +1,6 @@
 ﻿namespace MyTrades.Analytics
 
-open MyTrades.Analytics.Common
+open Common
 
 module Rsi =        
     type Change =
@@ -52,13 +52,7 @@ module Rsi =
                   let newRsiItem = { Date = stockData.[(counter + rsiLength - 1)].Date; Value = rsi } 
                   rsiHelper stockData rsiLength (counter + 1) (newRsiItem::res) currentAvgGain currentAvgLoss
         rsiHelper (Seq.toArray stockData) rsiLength 1 [ ] 0m 0m  
-    let isBuy iOrder =
-        match iOrder with
-        | Order.Buy -> true
-        | _ -> false
-    let isSell iOrder= 
-        not (isBuy iOrder)
-
+   
     //Buys when RSI is equal or below 30 and sells when RSI is equal or over 70
     //rsiData and price has to be the same size and at every position contain the data for the same day
     let BackTestRsiWithPrice (rsiData: seq<Quote>) (price: seq<Quote>) =        
