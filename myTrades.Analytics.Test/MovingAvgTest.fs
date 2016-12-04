@@ -1,6 +1,4 @@
-namespace MyTrades.Analytics
-
-module Tests = 
+module Tests.Ma 
 
     open System
     open Xunit

@@ -1,4 +1,4 @@
-module Tests
+module Tests.Willams
 
 open System
 open Xunit
@@ -13,6 +13,7 @@ open Xunit.Abstractions;
             let prices = GetBmwOhcl;
             let williams = WilliamsPR prices 14
             
-            output.WriteLine("aaaaaaaaaaaaaaaaaaaa")
+            //TODO: write test
+            0
        
 

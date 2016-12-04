@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="**\*.fs" />
+    <Compile Include="TestDataSource.fs" />
+    <Compile Include="RsiTest.fs" />
+    <Compile Include="MovingAvgTest.fs" />
+     <Compile Include="WilliamsPRTest.fs" />
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
 
