@@ -115,7 +115,7 @@ Similar there are back-testing methods for the other indicators with the same pa
 * BackTestRsiWithPrice: (as already discussed) buys when the RSI is below 30 and sells when it reaches 70
 
 ## Repository structure
-* [myTrades.Analytics:](../myTrades.Analytics) The library itself.   
-* [myTrades.Analytics.Test:](../myTrades.Analytics.Test) Test code based on XUnit.  
-* [myTrades.Analytics.Playground:](../myTrades.Analytics.Playground) This is a console application project in order to play with the library. During development it is very useful since currently there is no way to debug under CoreCLR with F# and XUnit cannot do printf output either (see https://github.com/xunit/xunit/issues/718).
+* [myTrades.Analytics:](/myTrades.Analytics) The library itself.   
+* [myTrades.Analytics.Test:](/myTrades.Analytics.Test) Test code based on XUnit.  
+* [myTrades.Analytics.Playground:](/myTrades.Analytics.Playground) This is a console application project in order to play with the library. During development it is very useful since currently there is no way to debug under CoreCLR with F# and XUnit cannot do printf output either (see https://github.com/xunit/xunit/issues/718).
 
