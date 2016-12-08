@@ -3,7 +3,7 @@
 
 myTrades.Analytics is an open source .NET library targeting netstandard1.6. 
 The library provides [technical analysis](https://en.wikipedia.org/wiki/Technical_analysis "Wikipedia article about technical analysis") for financial instruments.
-It is written in F#, but can be consumed from any .NET compatible programming language.  
+It is written in F#, but can be consumed from any .NET compatible programming language.
 
 ## API Overview
 
@@ -33,7 +33,7 @@ type OHCLWithDate = { OHCL: OHCL; Date: System.DateTime }
 ```Fsharp
 open System 
 open MyTrades.Analytics 
-open MovingAvarage 
+open MovingAverage 
  
 [<EntryPoint>] 
 let main argv = 
@@ -46,7 +46,7 @@ let main argv =
                        {Value = 5m  ; Date =new DateTime(2015, 03, 7)}; 
                        {Value = 9m  ; Date =new DateTime(2015, 03, 8)} ]; 
  
-        let smas = SimpleMovingAvarage prices 5
+        let smas = SimpleMovingAverage prices 5
 ```
 
 #### Calculate RSI
@@ -99,7 +99,6 @@ Meaning the ResultInPercent stores the overall gain or loss and the the second i
 open System  
 open MyTrades.Analytics 
 open MyTrades.Analytics.TestData 
-open Xunit.Abstractions 
  
 [<EntryPoint>] 
 let main argv = 
@@ -110,7 +109,7 @@ let main argv =
 
 
 Similar there are back-testing methods for the other indicators with the same parameters and the same return type. 
-* BackTestMovingAvarageWithPrice: Buys when SMA is in down trend and Price goes over it from below. 
+* BackTestMovingAverageWithPrice: Buys when SMA is in down trend and Price goes over it from below. 
 * BackTestWilliamsPr: Buys when Williams %R reaches -100 and after 5 days it is still below -85 and sells when it reaches 0 and after 5 days it is still above -15. (This is till WIP) 
 * BackTestRsiWithPrice: (as already discussed) buys when the RSI is below 30 and sells when it reaches 70
 

@@ -9,7 +9,7 @@
   <ItemGroup>
     <Compile Include="Types.fs" />
     <Compile Include="Common.fs" />
-    <Compile Include="MovingAvarage.fs" />
+    <Compile Include="MovingAverage.fs" />
     <Compile Include="Rsi.fs" />
     <Compile Include="WilliamsPR.fs" />
     <Compile Include="UltimateOscillator.fs" />  

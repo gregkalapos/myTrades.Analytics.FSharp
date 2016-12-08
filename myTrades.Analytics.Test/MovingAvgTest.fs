@@ -4,7 +4,7 @@ module Tests.Ma
     open Xunit
     open MyTrades.Analytics
 
-    open MovingAvarage
+    open MovingAverage
 
     [<Fact>]
     let ``Tet With 10 Values`` () =
@@ -17,7 +17,7 @@ module Tests.Ma
                        {Value = 5m  ; Date =new DateTime(2015, 03, 7)};
                        {Value = 9m  ; Date =new DateTime(2015, 03, 8)} ];
 
-        let mavgs = SimpleMovingAvarage prices 5
+        let mavgs = SimpleMovingAverage prices 5
 
         Assert.Equal(4, (Seq.length mavgs))
         
