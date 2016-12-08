@@ -2,6 +2,7 @@ open System
 open Xunit
 open MyTrades.Analytics
 open MyTrades.Analytics.TestData
+open MyTrades.Analytics.WilliamsPR
 open Rsi
 open Xunit.Abstractions
 
@@ -19,14 +20,19 @@ let main argv =
     // printfn "%f" bTestResult.ResultInPercent
     // printfn "%A" bTestResult.Transactions
     
-    let prices = GetBmwQuotes
+    // let prices = GetBmwQuotes
 
-    let rsiData = Rsi prices 14
-    let rsiBackTesingResult = BackTestRsiWithPrice rsiData (prices |> Seq.skip 14)
+    // let rsiData = Rsi prices 14
+    // let rsiBackTesingResult = BackTestRsiWithPrice rsiData (prices |> Seq.skip 14)
 
     // printfn "%s" (((Seq.head rsiData).Date).ToString());
 
 
     // printfn "%s" ((Seq.head (prices |> Seq.skip 14)).Date.ToString())
+
+    let prices = GetSampleOhcl;
+    let williams = WilliamsPR prices 14
+
+    printfn "%A" ((williams |> Seq.map(fun f -> f.Value)) |> Seq.toList)
 
     0

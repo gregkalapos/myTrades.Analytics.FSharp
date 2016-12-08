@@ -4,6 +4,40 @@ namespace MyTrades.Analytics
 module TestData =
     open System
 
+    ///Sample data from: http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:williams_r
+    let GetSampleOhcl =
+        let ohclList =[
+            {OHCL = {High = 127.01m; Low = 125.36m; Open = 0m; Close = 0m}; Date= new DateTime(2010,2,23)};
+            {OHCL = {High = 127.62m; Low = 126.16m; Open = 0m; Close = 0m}; Date= new DateTime(2010,2,24)};              
+            {OHCL = {High = 126.59m; Low = 124.93m; Open = 0m; Close = 0m}; Date= new DateTime(2010,2,25)};
+            {OHCL = {High = 127.35m; Low = 126.09m; Open = 0m; Close = 0m}; Date= new DateTime(2010,2,26)};             
+            {OHCL = {High = 128.17m; Low = 126.82m; Open = 0m; Close = 0m}; Date= new DateTime(2010,3,1)};
+            {OHCL = {High = 128.43m; Low = 126.48m; Open = 0m; Close = 0m}; Date= new DateTime(2010,3,2)};         
+            {OHCL = {High = 127.37m; Low = 126.03m; Open = 0m; Close = 0m}; Date= new DateTime(2010,3,3)};
+            {OHCL = {High = 126.42m; Low = 124.83m; Open = 0m; Close = 0m}; Date= new DateTime(2010,3,4)};
+            {OHCL = {High = 126.90m; Low = 126.39m; Open = 0m; Close = 0m}; Date= new DateTime(2010,3,5)};
+            {OHCL = {High = 126.85m; Low = 125.72m; Open = 0m; Close = 0m}; Date= new DateTime(2010,3,8)};
+            {OHCL = {High = 125.65m; Low = 124.56m; Open = 0m; Close = 0m}; Date= new DateTime(2010,3,9)};
+            {OHCL = {High = 125.72m; Low = 124.57m; Open = 0m; Close = 0m}; Date= new DateTime(2010,3,10)};
+            {OHCL = {High = 127.16m; Low = 125.07m; Open = 0m; Close = 0m}; Date= new DateTime(2010,3,11)};
+            {OHCL = {High = 127.72m; Low = 126.86m; Open = 0m ; Close = 127.29m}; Date = new DateTime(2010,3,12)};
+            {OHCL = {High = 127.69m; Low = 126.63m; Open = 0m ; Close = 127.18m}; Date = new DateTime(2010,3,15)};
+            {OHCL = {High = 128.22m; Low = 126.80m; Open = 0m ; Close = 128.01m}; Date = new DateTime(2010,3,16)};
+            {OHCL = {High = 128.27m; Low = 126.71m; Open = 0m ; Close = 127.11m}; Date = new DateTime(2010,3,17)};
+            {OHCL = {High = 128.09m; Low = 126.80m; Open = 0m ; Close = 127.73m}; Date = new DateTime(2010,3,18)};
+            {OHCL = {High = 128.27m; Low = 126.13m; Open = 0m ; Close = 127.06m}; Date = new DateTime(2010,3,19)};
+            {OHCL = {High = 127.74m; Low = 125.92m; Open = 0m ; Close = 127.33m}; Date = new DateTime(2010,3,22)};
+            {OHCL = {High = 128.77m; Low = 126.99m; Open = 0m ; Close = 128.71m}; Date = new DateTime(2010,3,23)};
+            {OHCL = {High = 129.29m; Low = 127.81m; Open = 0m ; Close = 127.87m}; Date = new DateTime(2010,3,24)};
+            {OHCL = {High = 130.06m; Low = 128.47m; Open = 0m ; Close = 128.58m}; Date = new DateTime(2010,3,25)};
+            {OHCL = {High = 129.12m; Low = 128.06m; Open = 0m ; Close = 128.60m}; Date = new DateTime(2010,3,26)};
+            {OHCL = {High = 129.29m; Low = 127.61m; Open = 0m ; Close = 127.93m}; Date = new DateTime(2010,3,29)};
+            {OHCL = {High = 128.47m; Low = 127.60m; Open = 0m ; Close = 128.11m}; Date = new DateTime(2010,3,30)};
+            {OHCL = {High = 128.09m; Low = 127.00m; Open = 0m ; Close = 127.60m}; Date = new DateTime(2010,3,31)};
+            {OHCL = {High = 128.65m; Low = 126.90m; Open = 0m ; Close = 127.60m}; Date = new DateTime(2010,4,1)};
+            {OHCL = {High = 129.14m; Low = 127.49m; Open = 0m ; Close = 128.69m}; Date = new DateTime(2010,4,5)};
+            {OHCL = {High = 128.64m; Low = 127.40m; Open = 0m ; Close = 128.27m}; Date = new DateTime(2010,4,6)}];
+        ohclList
     let GetBmwQuotes = 
         let quotes =
             [|          
