@@ -35,13 +35,12 @@ module Rsi =
         changes |> Array.map predicate
                 |> Array.average
     let private calculateRsi avgGain avgLoss =
-        //TODO: dev. by zero!
-      //  printfn "avgGain: %M" avgGain
-      //  printfn "avgLoss: %M" avgLoss
-        let rs = (avgGain / avgLoss)
-       // printfn "RS: %M" rs
-        (100m - (100m / (1m+rs)))
-    
+       if avgLoss = Decimal.Zero then 100m
+       else if avgGain = Decimal.Zero then 0m
+       else  
+            let rs = (avgGain / avgLoss)
+            (100m - (100m / (1m+rs)))
+
     let Rsi (stockData: seq<Quote>) rsiLength  = 
         let changes = calculateChanges (stockData)         
         let rec rsiHelper (changes: DateWithChange array) rsiLength (res: Quote list) (lastAvgGain: decimal) (lastAvgLoss: decimal) =
