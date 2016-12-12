@@ -32,7 +32,7 @@ let main argv =
 
     
     let prices = GetSampleQuotes
-    let rsi = Rsi prices 14
+    let rsires = Rsi prices 14
     //printfn "RSI: "
    // printfn "%A" (rsi |> Seq.map (fun f -> f.Value)) // ((rsi |> Seq.map(fun f -> f.Value)) |> Seq.toList)
 
@@ -44,7 +44,7 @@ let main argv =
     // let prices = GetSampleQuotes
     // let changes = calculateChanges prices
     
-    printfn "%A" rsi
+    printfn "%A" rsires
 
 
     0

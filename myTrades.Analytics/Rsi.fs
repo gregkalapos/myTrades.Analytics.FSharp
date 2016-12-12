@@ -46,56 +46,21 @@ module Rsi =
         let changes = calculateChanges (stockData)         
         let rec rsiHelper (changes: DateWithChange array) rsiLength (res: Quote list) (lastAvgGain: decimal) (lastAvgLoss: decimal) =
            match (changes |> Array.length) with 
-               | n when n < rsiLength -> res |> List.toSeq
-               | _ ->  
-                       // printfn "rsihelper"
-                        let currentGain = getUpwardValue (changes |> Array.item (rsiLength-1)).Change;
+               | n when n < rsiLength -> (res |> List.toSeq)
+               | _ ->   let currentGain = getUpwardValue (changes |> Array.item (rsiLength-1)).Change;
                         let avgGain = ((lastAvgGain * ((decimal)rsiLength - 1m)) + currentGain )/(decimal)rsiLength
                         let currentLoss = getDownwardValue (changes |> Array.item (rsiLength-1)).Change;
                         let avgLoss = ((lastAvgLoss * ((decimal)rsiLength - 1m)) + currentLoss )/(decimal)rsiLength
                         let newrsiValue = calculateRsi avgGain avgLoss
                         let newRsi = { Value = newrsiValue; Date = (changes |> Array.item ((rsiLength-1)) ).Date  }
-                        printfn "newitem: %M" newrsiValue
-                        rsiHelper (changes |> Array.tail) rsiLength (res @ [newRsi]) avgGain avgLoss   
-                    // let changesInRange = (changes |> Array.take rsiLength)
-                    // printfn "ChangeisinRangel %A" changesInRange
-                    // let changeValuesinRange = changesInRange |> Array.map (fun f -> f.Change)
-                    // let avgGain = avgOfVlaues getUpwardValue changeValuesinRange
-                    // printfn "AvgGain %M" avgGain
-                    // let avgLoss = avgOfVlaues getDownwardValue changeValuesinRange
-                    // printfn "avgLoss %M" avgLoss
-                    // let newRsi = {Value = calculateRsi avgGain avgLoss; Date = (changesInRange |> Array.last).Date  }
-                    // rsiHelper (changes |> Array.tail) rsiLength (res @ [newRsi])   
+                        rsiHelper (changes |> Array.tail) rsiLength (res @ [newRsi]) avgGain avgLoss     
         let changesInRange = (changes |> Array.take rsiLength)
-        //printfn "ChangeisinRangel %A" changesInRange
         let changeValuesinRange = changesInRange |> Array.map (fun f -> f.Change)
         let avgGain = avgOfVlaues getUpwardValue changeValuesinRange
-        //printfn "AvgGain %M" avgGain
         let avgLoss = avgOfVlaues getDownwardValue changeValuesinRange
-      //  printfn "avgLoss %M" avgLoss
         let newRsi = {Value = calculateRsi avgGain avgLoss; Date = (changesInRange |> Array.last).Date  }
-        rsiHelper (changes |> Array.tail) rsiLength [newRsi] avgGain avgLoss                      
-        rsiHelper changes rsiLength [] 
+        rsiHelper (changes |> Array.tail) rsiLength [newRsi] avgGain avgLoss  
 
-    //         match counter with
-    //           | 1 ->                                  
-    //               let firstAvarageGain = Array.sub changes 0 rsiLength
-    //                                       |> avgOfVlaues getUpwardValue
-    //               let firstAvarageLoss = Array.sub changes 0 rsiLength
-    //                                       |> avgOfVlaues getDownwardValue                
-    //               let rsi = calculateRsi firstAvarageGain firstAvarageLoss                 
-    //               let newRsiItem = { Date = stockData.[(counter + rsiLength - 1)].Date; Value = rsi } 
-    //               rsiHelper stockData rsiLength (counter + 1) (newRsiItem::res) firstAvarageGain firstAvarageLoss
-    //           | counter when counter = (stockData.Length - rsiLength + 1) ->       
-    //               res |> List.rev |> List.toSeq
-    //           | _ ->    
-    //               let currentAvgGain = (((prevAvgGain * 13m) + (getUpwardValue changes.[counter + rsiLength - 2])) / 14m)
-    //               let currentAvgLoss = (((prevAvgLoss * 13m) + (getDownwardValue changes.[counter + rsiLength - 2])) / 14m)
-    //               let rsi = calculateRsi currentAvgGain currentAvgLoss
-    //               let newRsiItem = { Date = stockData.[(counter + rsiLength - 1)].Date; Value = rsi } 
-    //               rsiHelper stockData rsiLength (counter + 1) (newRsiItem::res) currentAvgGain currentAvgLoss
-    //     rsiHelper (Seq.toArray stockData) rsiLength 1 [ ] 0m 0m  
-   
     //Buys when RSI is equal or below 30 and sells when RSI is equal or over 70
     //rsiData and price has to be the same size and at every position contain the data for the same day
     let BackTestRsiWithPrice (rsiData: seq<Quote>) (price: seq<Quote>) =        
