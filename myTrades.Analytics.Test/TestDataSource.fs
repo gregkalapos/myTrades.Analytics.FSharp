@@ -4,7 +4,47 @@ namespace MyTrades.Analytics
 module TestData =
     open System
 
+    ///Sample data from: http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:relative_strength_index_rsi
+    ///used e.g. in RSI tests
+    let GetSampleQuotes =
+        let quoteList = [
+            {Date = new DateTime(2009,12, 14); Value=44.34m};
+            {Date = new DateTime(2009,12, 15); Value=44.09m};
+            {Date = new DateTime(2009,12, 16); Value=44.15m};
+            {Date = new DateTime(2009,12, 17); Value=43.61m};
+            {Date = new DateTime(2009,12, 18); Value=44.33m};
+            {Date = new DateTime(2009,12, 21); Value=44.83m};
+            {Date = new DateTime(2009,12, 22); Value=45.10m};
+            {Date = new DateTime(2009,12, 23); Value=45.42m};
+            {Date = new DateTime(2009,12, 24); Value=45.84m};
+            {Date = new DateTime(2009,12, 28); Value=46.08m};
+            {Date = new DateTime(2009,12, 29); Value=45.89m};
+            {Date = new DateTime(2009,12, 30); Value=46.03m};
+            {Date = new DateTime(2009,12, 31); Value=45.61m};
+            {Date = new DateTime(2010,1,4); Value=46.28m  };
+            {Date = new DateTime(2010,1,5); Value=46.28m  };
+            {Date = new DateTime(2010,1,6); Value=46.00m  };
+            {Date = new DateTime(2010,1,7); Value=46.03m  };
+            {Date = new DateTime(2010,1,8); Value=46.41m  };
+            {Date = new DateTime(2010,1,11); Value=46.22m };
+            {Date = new DateTime(2010,1,12); Value=45.64m };
+            {Date = new DateTime(2010,1,13); Value=46.21m };
+            {Date = new DateTime(2010,1,14); Value=46.25m };
+            {Date = new DateTime(2010,1,15); Value=45.71m };
+            {Date = new DateTime(2010,1,19); Value=46.45m };
+            {Date = new DateTime(2010,1,20); Value=45.78m };
+            {Date = new DateTime(2010,1,21); Value=45.35m };
+            {Date = new DateTime(2010,1,22); Value=44.03m };
+            {Date = new DateTime(2010,1,25); Value=44.18m };
+            {Date = new DateTime(2010,1,26); Value=44.22m };
+            {Date = new DateTime(2010,1,27); Value=44.57m };
+            {Date = new DateTime(2010,1,28); Value=43.42m };
+            {Date = new DateTime(2010,1,29); Value=42.66m };
+            {Date = new DateTime(2010,2,1); Value=43.13m  }]
+        quoteList
+
     ///Sample data from: http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:williams_r
+    ///used e.g. in William %R tests
     let GetSampleOhcl =
         let ohclList =[
             {OHCL = {High = 127.01m; Low = 125.36m; Open = 0m; Close = 0m}; Date= new DateTime(2010,2,23)};

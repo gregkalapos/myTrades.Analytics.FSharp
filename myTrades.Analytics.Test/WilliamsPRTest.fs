@@ -68,7 +68,19 @@ module Tests.Willams
         Assert.Equal( -43.236714975845410628019323670M, (williamsArray |> Array.item 16).Value);
         Assert.Equal(new DateTime(2010,4, 6), (williamsArray |> Array.item 16).Date);
         0
-            
+   
     
-       
+    [<Fact>] 
+    let ``William %R Shift data by 1 day`` () =
+        let prices = GetSampleOhcl;
+        let williams = WilliamsPR prices 14
+        Assert.Equal(17, williams |> Seq.length)
+        let williamsArray = Seq.toArray williams
 
+        let prices2 = prices |> Seq.tail
+        let williams2 = WilliamsPR prices2 14
+        Assert.Equal(16, williams2 |> Seq.length)
+        let williamsArray2 = Seq.toArray williams2
+
+        for i = 0 to 15 do
+            Assert.Equal( ((williamsArray |> Array.item (i+1)).Value), ((williamsArray2 |> Array.item i).Value ));

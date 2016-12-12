@@ -7,7 +7,7 @@ module Tests.Ma
     open MovingAverage
 
     [<Fact>]
-    let ``Tet With 10 Values`` () =
+    let ``Tet SMA With 10 Values`` () =
         let prices = [ {Value = 3m  ; Date =new DateTime(2015, 03, 1)};
                        {Value = 4m  ; Date =new DateTime(2015, 03, 2)};
                        {Value = 5m  ; Date =new DateTime(2015, 03, 3)};

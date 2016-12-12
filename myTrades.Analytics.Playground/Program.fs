@@ -30,9 +30,21 @@ let main argv =
 
     // printfn "%s" ((Seq.head (prices |> Seq.skip 14)).Date.ToString())
 
-    let prices = GetSampleOhcl;
-    let williams = WilliamsPR prices 14
+    
+    let prices = GetSampleQuotes
+    let rsi = Rsi prices 14
+    //printfn "RSI: "
+   // printfn "%A" (rsi |> Seq.map (fun f -> f.Value)) // ((rsi |> Seq.map(fun f -> f.Value)) |> Seq.toList)
 
-    printfn "%A" ((williams |> Seq.map(fun f -> f.Value)) |> Seq.toList)
+    // let prices2 = (GetSampleQuotes |> Seq.tail)
+    // let rsi2 = Rsi prices2 14
+    // printfn "RSI2: "
+    // printfn "%A" ((rsi2 |> Seq.map(fun f -> f.Value)) |> Seq.toList)
+
+    // let prices = GetSampleQuotes
+    // let changes = calculateChanges prices
+    
+    printfn "%A" rsi
+
 
     0

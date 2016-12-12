@@ -9,7 +9,8 @@
   <ItemGroup>
     <Compile Include="TestDataSource.fs" />   
     <Compile Include="MovingAvgTest.fs" />
-     <Compile Include="WilliamsPRTest.fs" />
+    <Compile Include="WilliamsPRTest.fs" />
+    <Compile Include="RsiTest.fs" />
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
 
