@@ -5,6 +5,7 @@ open MyTrades.Analytics.TestData
 open MyTrades.Analytics.WilliamsPR
 open Rsi
 open Xunit.Abstractions
+open UltimateOscillator
 
 [<EntryPoint>]
 let main argv = 
@@ -31,8 +32,8 @@ let main argv =
     // printfn "%s" ((Seq.head (prices |> Seq.skip 14)).Date.ToString())
 
     
-    let prices = GetSampleQuotes
-    let rsires = Rsi prices 14
+    let prices = GetOlhcForUltimateOscillatorTest
+    let rsires = UltimateOscillator prices
     //printfn "RSI: "
    // printfn "%A" (rsi |> Seq.map (fun f -> f.Value)) // ((rsi |> Seq.map(fun f -> f.Value)) |> Seq.toList)
 

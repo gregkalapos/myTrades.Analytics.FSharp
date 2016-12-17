@@ -4,6 +4,43 @@ namespace MyTrades.Analytics
 module TestData =
     open System
 
+
+    ///test data from http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:ultimate_oscillator
+    let GetOlhcForUltimateOscillatorTest = 
+        let list = [
+                    {Date = new DateTime(10, 10, 20); OHCL={High=57.93m; Low=56.52m; Close=57.57m; Open=0m}};
+                    {Date = new DateTime(10, 10, 21); OHCL={High=58.46m; Low=57.07m; Close=57.67m; Open=0m}};
+                    {Date = new DateTime(10, 10, 22); OHCL={High=57.76m; Low=56.44m; Close=56.92m; Open=0m}};
+                    {Date = new DateTime(10, 10, 25); OHCL={High=59.88m; Low=57.53m; Close=58.47m; Open=0m}};
+                    {Date = new DateTime(10, 10, 26); OHCL={High=59.02m; Low=57.58m; Close=58.74m; Open=0m}};
+                    {Date = new DateTime(10, 10, 27); OHCL={High=60.18m; Low=57.89m; Close=60.01m; Open=0m}};
+                    {Date = new DateTime(10, 10, 28); OHCL={High=60.29m; Low=58.01m; Close=58.45m; Open=0m}};
+                    {Date = new DateTime(10, 10, 29); OHCL={High=59.86m; Low=58.43m; Close=59.18m; Open=0m}};
+                    {Date = new DateTime(10, 11, 01); OHCL={High=59.78m; Low=58.45m; Close=58.67m; Open=0m}};
+                    {Date = new DateTime(10, 11, 02); OHCL={High=59.73m; Low=58.58m; Close=58.87m; Open=0m}};
+                    {Date = new DateTime(10, 11, 03); OHCL={High=59.60m; Low=58.54m; Close=59.30m; Open=0m}};
+                    {Date = new DateTime(10, 11, 04); OHCL={High=62.96m; Low=59.62m; Close=62.57m; Open=0m}};
+                    {Date = new DateTime(10, 11, 05); OHCL={High=62.27m; Low=61.36m; Close=62.02m; Open=0m}};
+                    {Date = new DateTime(10, 11, 08); OHCL={High=63.06m; Low=61.25m; Close=62.05m; Open=0m}};
+                    {Date = new DateTime(10, 11, 09); OHCL={High=63.74m; Low=62.19m; Close=62.52m; Open=0m}};
+                    {Date = new DateTime(10, 11, 10); OHCL={High=62.74m; Low=61.02m; Close=62.37m; Open=0m}};
+                    {Date = new DateTime(10, 11, 11); OHCL={High=63.48m; Low=61.57m; Close=63.40m; Open=0m}};
+                    {Date = new DateTime(10, 11, 12); OHCL={High=63.23m; Low=60.79m; Close=61.90m; Open=0m}};
+                    {Date = new DateTime(10, 11, 15); OHCL={High=62.14m; Low=60.34m; Close=60.54m; Open=0m}};
+                    {Date = new DateTime(10, 11, 16); OHCL={High=60.50m; Low=58.20m; Close=59.09m; Open=0m}};
+                    {Date = new DateTime(10, 11, 17); OHCL={High=59.89m; Low=58.91m; Close=59.01m; Open=0m}};
+                    {Date = new DateTime(10, 11, 18); OHCL={High=60.32m; Low=59.09m; Close=59.39m; Open=0m}};
+                    {Date = new DateTime(10, 11, 19); OHCL={High=59.71m; Low=58.59m; Close=59.21m; Open=0m}};
+                    {Date = new DateTime(10, 11, 22); OHCL={High=62.22m; Low=59.44m; Close=59.66m; Open=0m}};
+                    {Date = new DateTime(10, 11, 23); OHCL={High=59.74m; Low=57.33m; Close=59.07m; Open=0m}};
+                    {Date = new DateTime(10, 11, 24); OHCL={High=59.94m; Low=59.11m; Close=59.90m; Open=0m}};
+                    {Date = new DateTime(10, 11, 26); OHCL={High=59.65m; Low=58.87m; Close=59.29m; Open=0m}};
+                    {Date = new DateTime(10, 11, 29); OHCL={High=59.37m; Low=58.24m; Close=59.12m; Open=0m}};
+                    {Date = new DateTime(10, 11, 30); OHCL={High=60.21m; Low=58.26m; Close=59.68m; Open=0m}};
+                    {Date = new DateTime(10, 12, 01); OHCL={High=61.70m; Low=60.58m; Close=61.48m; Open=0m}}
+                    ]
+        list
+
     ///Sample data from: http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:relative_strength_index_rsi
     ///used e.g. in RSI tests
     let GetSampleQuotes =
