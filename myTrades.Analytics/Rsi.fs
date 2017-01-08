@@ -60,22 +60,25 @@ module Rsi =
         let newRsi = {Value = calculateRsi avgGain avgLoss; Date = (changesInRange |> Array.last).Date  }
         rsiHelper (changes |> Array.tail) rsiLength [newRsi] avgGain avgLoss  
 
-    //Buys when RSI is equal or below 30 and sells when RSI is equal or over 70
-    //rsiData and price has to be the same size and at every position contain the data for the same day
-    let BackTestRsiWithPrice (rsiData: seq<Quote>) (price: seq<Quote>) =        
+    let BackTestRsiWithPriceAndThresholds (rsiData: seq<Quote>) (price: seq<Quote>) sellThreshold buyThreshold =        
         let rec backTestRsiWithPriceHelper (rsiData: Quote list) (price: Quote array) (lastOder: Order) (result: TransactionQuote list) lastBuyPrice = 
             match rsiData with
             | [] -> let sumResult = CalculateNetResult result
                     {Transactions = result; ResultInPercent = sumResult }
             | head :: tail ->  
                 match head with
-                | head when head.Value < 30m && (lastOder|> isSell) -> //Buy
+                | head when head.Value < buyThreshold && (lastOder|> isSell) -> //Buy
                     let currentQuote = Array.head price
                     let buyItem = Buy { Date = currentQuote.Date; Value = currentQuote.Value }
                     backTestRsiWithPriceHelper tail (Array.tail price) Order.Buy (buyItem::result) currentQuote.Value
-                | head when head.Value > 70m && (lastOder|> isBuy) -> //Sell
+                | head when head.Value > sellThreshold && (lastOder|> isBuy) -> //Sell
                     let currentQuote = Array.head price
                     let sellItem = Sell ( {Date = currentQuote.Date; Value = currentQuote.Value}, (((double((currentQuote.Value / lastBuyPrice ))) - 1.0) * 100.0) )
                     backTestRsiWithPriceHelper tail (Array.tail price) Order.Sell (sellItem::result) currentQuote.Value
                 | _ ->  backTestRsiWithPriceHelper tail (Array.tail price) lastOder result lastBuyPrice //No action, just skip
         backTestRsiWithPriceHelper (List.ofSeq rsiData) (Seq.toArray price) Order.Sell [] 0m
+    
+    //Buys when RSI is equal or below 30 and sells when RSI is equal or over 70
+    //rsiData and price has to be the same size and at every position contain the data for the same day
+    let BackTestRsiWithPrice (rsiData: seq<Quote>) (price: seq<Quote>) =        
+        BackTestRsiWithPriceAndThresholds (rsiData: seq<Quote>) (price: seq<Quote>) 70m 30m 
