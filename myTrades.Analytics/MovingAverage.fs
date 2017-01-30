@@ -1,8 +1,9 @@
 namespace MyTrades.Analytics
 
 open MyTrades.Analytics.Common
+open System
 
-module MovingAverage =    
+module MovingAvarage =    
    
     let private quoteArrayToString (arrayToConvert: Quote array) =
         let str = new System.Text.StringBuilder()
@@ -18,30 +19,40 @@ module MovingAverage =
         System.Diagnostics.Debug.WriteLine (quoteArrayToString arrayToPrint)// (String.init ("Array to calculate %A" arayToPring))
         arrayToPrint 
     
-    ///Gives the simlpe moving average for the stockData. e.g. if it contains 5 items 
+    ///Gives the simlpe moving avarage for the stockData. e.g. if it contains 5 items 
     ///then the moving avg is for all the 5.
-    let private simpleMovingAverageSingle (stockData: seq<Quote>) =        
+    let private simpleMovingAvarageSingle (stockData: seq<Quote>) =        
           stockData          
           |> Seq.map(fun f -> f.Value)
           |> Seq.average
           
-    let SimpleMovingAverage (stockData: seq<Quote>) forDays =     
-        let firstIt = (Seq.length stockData) - forDays
-        let rec simpleMovingAverageHelper (stockData: Quote array) forDays counter (mvas: Quote list) =  
-            match counter with
-            | -1 ->
-             List.toSeq mvas             
-            | c when c = firstIt -> 
-             let newAvg = simpleMovingAverageSingle (stockData |> Seq.skip counter |> Seq.take forDays)   
-             simpleMovingAverageHelper stockData 
-                    forDays (counter - 1) ({ Date = stockData.[(counter + forDays - 1)].Date; Value = newAvg} :: mvas) 
-            | _ -> 
-             let str = new System.Text.StringBuilder()
-             let newAvg = mvas.Head.Value - (stockData.[counter+forDays].Value/decimal(forDays)) 
-                            + (stockData.[counter].Value/decimal(forDays))            
-             simpleMovingAverageHelper stockData 
-                forDays (counter - 1) ({ Date = stockData.[(counter + forDays - 1)].Date; Value = newAvg} :: mvas)                            
-        simpleMovingAverageHelper (Seq.toArray stockData) forDays firstIt []
+    let private FsAsyncSimpleMovingAverage (stockData: seq<Quote>) forDays (cT: Threading.CancellationToken)  =  
+        async
+         {   
+           let firstIt = (Seq.length stockData) - forDays
+           let rec simpleMovingAvarageHelper (stockData: Quote array) forDays counter (mvas: Quote list) =  
+               cT.ThrowIfCancellationRequested();
+               match counter with
+               | -1 ->
+                List.toSeq mvas             
+               | c when c = firstIt -> 
+                let newAvg = simpleMovingAvarageSingle (stockData |> Seq.skip counter |> Seq.take forDays)   
+                simpleMovingAvarageHelper stockData 
+                       forDays (counter - 1) ({ Date = stockData.[(counter + forDays - 1)].Date; Value = newAvg} :: mvas) 
+               | _ -> 
+                let str = new System.Text.StringBuilder()
+                let newAvg = mvas.Head.Value - (stockData.[counter+forDays].Value/decimal(forDays)) 
+                               + (stockData.[counter].Value/decimal(forDays))            
+                simpleMovingAvarageHelper stockData 
+                   forDays (counter - 1) ({ Date = stockData.[(counter + forDays - 1)].Date; Value = newAvg} :: mvas)                            
+           return simpleMovingAvarageHelper (Seq.toArray stockData) forDays firstIt []
+        }
+
+    let SimpleMovingAverageAsync (stockData: seq<Quote>) forDays (cT: Threading.CancellationToken) =   
+        Async.StartAsTask(FsAsyncSimpleMovingAverage stockData forDays cT)
+
+    let SimpleMovingAverage (stockData: seq<Quote>) forDays =
+        (FsAsyncSimpleMovingAverage stockData forDays (new Threading.CancellationToken())) |> Async.RunSynchronously
 
     let GetTrendForData (stockData: seq<Quote>) =         
         let rec getTrendForDataHelper (stockData: Quote array) counter (trend: DateWithTrendDirection list) =
@@ -54,47 +65,56 @@ module MovingAverage =
         getTrendForDataHelper (Seq.toArray stockData) ((Seq.length stockData) - 1) []
             
     //cross over: buy when MA is down trend and Price goes over it from below 
-    let BackTestMovingAverageWithPrice (movingAverageWithTrend: seq<QuoteWithDirection>) (price: seq<Quote>) =       
-        let rec backTestMovingAverageWithPriceHelper counter (movingAverageWithTrend: seq<QuoteWithDirection>) (price: Quote array) (result: TransactionQuote list) lastOrder lastBuyPrice =
-            System.Diagnostics.Debug.WriteLine(price.[counter].Date.ToString());
-            match counter with
-            | c when c = ((Seq.length movingAverageWithTrend) - 1) ->
-                       let sumResult = CalculateNetResult result
-                       {Transactions = result; ResultInPercent = sumResult}
-            | _ -> match ( (fst (Seq.item (counter - 1)  movingAverageWithTrend)).Value, (snd (Seq.item (counter - 1) movingAverageWithTrend)), (price.[(counter - 1)]).Value, 
-                           (fst (Seq.item (counter) movingAverageWithTrend)).Value, (price.[counter]).Value, lastOrder ) with
-                    | (maBofore, trendBefore, 
-                       priceBofore, maCurrent, 
-                       priceCurrent, lastOrder) 
-                       when 
-                        (maBofore > priceBofore && 
-                             match trendBefore with
-                                   |Down -> true
-                                   |_ -> false 
-                         && 
-                             match lastOrder with
-                                  | Order.Sell -> true
-                                  | Order.Buy -> false                         
-                        &&
-                         priceCurrent > maCurrent) -> System.Diagnostics.Debug.WriteLine("Buy");
-                                                      let buyItem = Buy {Date = price.[counter].Date; Value = price.[counter].Value }
-                                                      backTestMovingAverageWithPriceHelper (counter + 1) movingAverageWithTrend price (buyItem::result) Order.Buy price.[counter].Value 
-                    | (maBofore, trendBefore, 
-                       priceBofore, maCurrent, 
-                       priceCurrent, lastOrder) 
-                       when 
-                        (maBofore < priceBofore &&
-                             match trendBefore with
-                                   |Up -> true
-                                   |_ -> false 
-                         &&   
-                            match lastOrder with
-                                  | Order.Sell -> false
-                                  | Order.Buy -> true     
-                        &&
-                         priceCurrent < maCurrent) -> System.Diagnostics.Debug.WriteLine("Sell");
-                                                      let gain = (((double((price.[counter].Value / lastBuyPrice ))) - 1.0) * 100.0 )
-                                                      let sellItem = Sell ({ Date = price.[counter].Date ; Value = price.[counter].Value } ,  gain)
-                                                      backTestMovingAverageWithPriceHelper (counter + 1) movingAverageWithTrend price (sellItem::result) Order.Sell 0m                        
-                    | _ -> backTestMovingAverageWithPriceHelper (counter + 1) movingAverageWithTrend price result lastOrder lastBuyPrice
-        backTestMovingAverageWithPriceHelper (1) movingAverageWithTrend (Seq.toArray price) [] Order.Sell 0m
+    let FsAsyncBackTestMovingAvarageWithPrice (movingAvarageWithTrend: seq<QuoteWithDirection>) (price: seq<Quote>) (cT: Threading.CancellationToken) =  
+        async
+            {     
+             let rec backTestMovingAvarageWithPriceHelper counter (movingAvarageWithTrend: seq<QuoteWithDirection>) (price: Quote array) (result: TransactionQuote list) lastOrder lastBuyPrice =
+                 cT.ThrowIfCancellationRequested();
+                 match counter with
+                 | c when c = ((Seq.length movingAvarageWithTrend) - 1) ->
+                            let sumResult = CalculateNetResult result
+                            {Transactions = result; ResultInPercent = sumResult}
+                 | _ -> match ( (fst (Seq.item (counter - 1)  movingAvarageWithTrend)).Value, (snd (Seq.item (counter - 1) movingAvarageWithTrend)), (price.[(counter - 1)]).Value, 
+                                (fst (Seq.item (counter) movingAvarageWithTrend)).Value, (price.[counter]).Value, lastOrder ) with
+                         | (maBofore, trendBefore, 
+                            priceBofore, maCurrent, 
+                            priceCurrent, lastOrder) 
+                            when 
+                             (maBofore > priceBofore && 
+                                  match trendBefore with
+                                        |Down -> true
+                                        |_ -> false 
+                              && 
+                                  match lastOrder with
+                                       | Order.Sell -> true
+                                       | Order.Buy -> false                         
+                             &&
+                              priceCurrent > maCurrent) -> System.Diagnostics.Debug.WriteLine("Buy");
+                                                           let buyItem = Buy {Date = price.[counter].Date; Value = price.[counter].Value }
+                                                           backTestMovingAvarageWithPriceHelper (counter + 1) movingAvarageWithTrend price (buyItem::result) Order.Buy price.[counter].Value 
+                         | (maBofore, trendBefore, 
+                            priceBofore, maCurrent, 
+                            priceCurrent, lastOrder) 
+                            when 
+                             (maBofore < priceBofore &&
+                                  match trendBefore with
+                                        |Up -> true
+                                        |_ -> false 
+                              &&   
+                                 match lastOrder with
+                                       | Order.Sell -> false
+                                       | Order.Buy -> true     
+                             &&
+                              priceCurrent < maCurrent) -> System.Diagnostics.Debug.WriteLine("Sell");
+                                                           let gain = (((double((price.[counter].Value / lastBuyPrice ))) - 1.0) * 100.0 )
+                                                           let sellItem = Sell ({ Date = price.[counter].Date ; Value = price.[counter].Value } ,  gain)
+                                                           backTestMovingAvarageWithPriceHelper (counter + 1) movingAvarageWithTrend price (sellItem::result) Order.Sell 0m                        
+                         | _ -> backTestMovingAvarageWithPriceHelper (counter + 1) movingAvarageWithTrend price result lastOrder lastBuyPrice
+             return backTestMovingAvarageWithPriceHelper (1) movingAvarageWithTrend (Seq.toArray price) [] Order.Sell 0m
+        }
+
+    let BackTestMovingAvarageWithPriceAsync (movingAvarageWithTrend: seq<QuoteWithDirection>) (price: seq<Quote>) cT =
+        Async.StartAsTask(FsAsyncBackTestMovingAvarageWithPrice movingAvarageWithTrend price cT)
+
+    let  BackTestMovingAvarageWithPrice (movingAvarageWithTrend: seq<QuoteWithDirection>) (price: seq<Quote>) =
+        (FsAsyncBackTestMovingAvarageWithPrice movingAvarageWithTrend price (new Threading.CancellationToken())) |> Async.RunSynchronously

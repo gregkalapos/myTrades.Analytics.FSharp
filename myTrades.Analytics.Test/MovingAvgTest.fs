@@ -4,7 +4,7 @@ module Tests.Ma
     open Xunit
     open MyTrades.Analytics
 
-    open MovingAverage
+    open MovingAvarage
 
     [<Fact>]
     let ``Tet SMA With 10 Values`` () =
